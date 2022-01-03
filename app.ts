@@ -1,9 +1,12 @@
 import express, { Request, Response } from "express";
-import cors from "cors";
+import bodyParser from "body-parser";
+
 const app = express(); // create instance of express app
 const port = process.env.port || 3000; // define port
-app.use(cors);
 const usersRoutes = require("./routes/usersRoutes");
+
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true, }))
 
 // routes
 app.get('/', (req: Request, res: Response) => res.send('Welcome to jumpstart api Data'));

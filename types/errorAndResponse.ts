@@ -1,6 +1,6 @@
-
 export interface ErrorAndResponse {
-   error: {},
-   response: {},
-   rows: {}
+   error: Error,
+   response: Response,
+   rows: {},
+   detail: string,
 }
