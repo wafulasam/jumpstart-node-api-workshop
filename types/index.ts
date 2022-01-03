@@ -1,9 +1,7 @@
 import { User } from "./users";
-import { Error, Response, ErrorAndResponse } from "./errorAndResponse";
+import { ErrorAndResponse } from "./errorAndResponse";
 
 export {
    User,
-   Error,
-   Response,
    ErrorAndResponse
 }

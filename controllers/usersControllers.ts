@@ -1,15 +1,7 @@
 // users controllers
 import { Request, Response } from "express"
-import { User, ErrorAndResponse, Error } from "../types";
-
-const Pool = require('pg').Pool;
-const pool = new Pool({
-   user: 'postgres',
-   password: 'admin',
-   database: 'jump-start',
-   host: 'localhost',
-   port: 5432
-})
+import { User, ErrorAndResponse } from "../types";
+import { pool } from "../databaseConfigs";
 
 // creating users table
 function createUsersTable () {
