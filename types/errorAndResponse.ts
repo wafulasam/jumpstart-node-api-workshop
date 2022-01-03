@@ -1,5 +1,6 @@
 
 export interface ErrorAndResponse {
    error: {},
-   response: {}
+   response: {},
+   rows: {}
 }

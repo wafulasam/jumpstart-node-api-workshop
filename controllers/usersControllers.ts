@@ -26,14 +26,25 @@ export const getAllUsers = (req: Request, res: Response) => {
       res.status(200).json({
           status: 'success',
           message: 'Retrieved ALL users',
-          data: results,
+          data: results.rows
       })
   })
 };
 
 // get a user by ID
 export const getUserByID = (req: Request, res: Response) => {
+   const userID = parseInt(req.params.id);
 
+   pool.query('SELECT * FROM users WHERE user_id = $1', [userID], (error: ErrorAndResponse, results: ErrorAndResponse) => {
+      if (error) {
+         throw error
+      }
+      res.status(200).json({
+          status: 'success',
+          message: `Retrieved ONE user with ID: ${userID}`,
+          data: results.rows
+      })
+  })
 };
 
 // add a user
