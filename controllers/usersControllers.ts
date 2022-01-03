@@ -17,6 +17,25 @@ function createUsersTable () {
 }
 // createUsersTable();
 
+// get all users
+export const getAllUsers = (req: Request, res: Response) => {
+   pool.query('SELECT * FROM users ORDER BY user_id ASC', (error: ErrorAndResponse, results: ErrorAndResponse) => {
+      if (error) {
+         throw error
+      }
+      res.status(200).json({
+          status: 'success',
+          message: 'Retrieved ALL users',
+          data: results,
+      })
+  })
+};
+
+// get a user by ID
+export const getUserByID = (req: Request, res: Response) => {
+
+};
+
 // add a user
 export const addNewUser = (req: Request, res: Response) => {
    const { firstname, lastname, email, phone }: User = req.body;
@@ -30,16 +49,6 @@ export const addNewUser = (req: Request, res: Response) => {
       })
   })
    
-};
-
-// get all users
-export const getAllUsers = (req: Request, res: Response) => {
-
-};
-
-// get a user by ID
-export const getUserByID = (req: Request, res: Response) => {
-
 };
 
 // update a user by ID
