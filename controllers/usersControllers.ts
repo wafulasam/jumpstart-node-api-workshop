@@ -24,9 +24,9 @@ export const getAllUsers = (req: Request, res: Response) => {
          throw error
       }
       res.status(200).json({
-          status: 'success',
-          message: 'Retrieved ALL users',
-          data: results.rows
+         status: 'success',
+         message: 'Retrieved ALL users',
+         data: results.rows
       })
   })
 };
@@ -40,9 +40,9 @@ export const getUserByID = (req: Request, res: Response) => {
          throw error
       }
       res.status(200).json({
-          status: 'success',
-          message: `Retrieved ONE user with ID: ${userID}`,
-          data: results.rows
+         status: 'success',
+         message: `Retrieved ONE user with ID: ${userID}`,
+         data: results.rows
       })
   })
 };
@@ -55,8 +55,8 @@ export const addNewUser = (req: Request, res: Response) => {
          throw error;
       }
       res.status(201).json({
-          status: 'success',
-          message: `Inserted a user`,
+         status: 'success',
+         message: `Inserted a user`,
       })
   })
    
@@ -64,6 +64,22 @@ export const addNewUser = (req: Request, res: Response) => {
 
 // update a user by ID
 export const updateUserByID = (req: Request, res: Response) => {
+   const id = parseInt(req.params.id)
+   const { firstname, lastname, email, phone } = req.body;
+
+   pool.query(
+      'UPDATE users SET firstname = $1, lastname = $2, email = $3, phone = $4 WHERE user_id = $5',
+      [firstname, lastname, email, phone, id],
+      (error: ErrorAndResponse, results: ErrorAndResponse) => {
+         if (error) {
+            throw error
+         }
+         res.status(200).json({
+            status: 'success',
+            message: `MODIFIED a user with ID: ${id}`,
+         })
+      }
+  )
 
 };
 
