@@ -7,7 +7,7 @@ const usersRoutes = require("./routes/usersRoutes");
 
 // routes
 app.get('/', (req: Request, res: Response) => res.send('Welcome to jumpstart api Data'));
-app.use("/api/", usersRoutes);
+// app.use("/api/", usersRoutes);
 
 // Start a TCP server listening for connections on the given port and host
 app.listen(port, ()=> {
