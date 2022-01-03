@@ -85,5 +85,16 @@ export const updateUserByID = (req: Request, res: Response) => {
 
 // delete user by ID
 export const deleteUserByID = (req: Request, res: Response) => {
-   
+   const id = parseInt(req.params.id);
+
+   pool.query('DELETE FROM users WHERE user_id = $1', [id], (error: ErrorAndResponse, results: ErrorAndResponse) => {
+      if (error) {
+         throw error
+      }
+      res.status(200).json({
+         status: 'success',
+         message: `DELETED a user with ID: ${id}`,
+         data: results.rows
+      })
+  })
 };
