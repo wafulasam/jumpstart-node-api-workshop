@@ -5,7 +5,18 @@ import { pool } from "../databaseConfigs";
 
 // creating users table
 function createUsersTable () {
-   pool.query('CREATE TABLE IF NOT EXISTS users (user_id serial not null PRIMARY KEY, firstname VARCHAR (50), lastname VARCHAR (50), email VARCHAR (355) UNIQUE NOT NULL, phone VARCHAR (15) UNIQUE NOT NULL)')
+   pool.query(`
+   CREATE TABLE IF NOT EXISTS 
+   users (
+      user_id SERIAL PRIMARY KEY NOT NULL, 
+      firstname VARCHAR (50), 
+      lastname VARCHAR (50), 
+      email VARCHAR (355) UNIQUE NOT NULL, 
+      phone VARCHAR (15) UNIQUE NOT NULL,
+      password VARCHAR (15) NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   )`)
 }
 createUsersTable();
 
@@ -30,7 +41,7 @@ export const getUserByID = (req: Request, res: Response) => {
       !error ?
       res.status(200).json({
          status: 'success',
-         message: `Retrieved ONE user with ID: ${userID}`,
+         message: results.rows <1 ? `user with id: ${userID} not found` :`retrieved user with id: ${userID}`,
          data: results.rows
       })
       : res.json(error); 
@@ -39,17 +50,26 @@ export const getUserByID = (req: Request, res: Response) => {
 
 // add a user
 export const addNewUser = (req: Request, res: Response) => {
-   // generate random id
-   function getRandomNumber (max:number) { return Math.floor(Math.random() * Math.floor(max))}
-   const id = getRandomNumber(1000000)
+   const { firstname, lastname, email, phone, password }: User = req.body;
 
-   const { firstname, lastname, email, phone }: User = req.body;
-   
-   pool.query('INSERT INTO users (user_id, firstname, lastname, email, phone) VALUES ($1, $2, $3, $4, $5)', [ id, firstname, lastname, email, phone ], (error:ErrorAndResponse, results: ErrorAndResponse) => {
+   pool.query(`
+   INSERT INTO 
+   users (
+      user_id, 
+      firstname, 
+      lastname, 
+      email, 
+      phone, 
+      password, 
+      created_at, 
+      updated_at
+   ) 
+   VALUES (DEFAULT, $1, $2, $3, $4, $5, DEFAULT, DEFAULT)`, 
+   [ firstname, lastname, email, phone, password ], (error:ErrorAndResponse, results: ErrorAndResponse) => {
       !error ?
       res.status(201).json({
          status: 'success',
-         message: `Inserted a user with ID: ${id}`,
+         message: `Inserted a user with email: ${email}`,
       })
       : res.json({
          error
@@ -71,7 +91,7 @@ export const updateUserByID = (req: Request, res: Response) => {
          !error ?
          res.status(200).json({
             status: 'success',
-            message: `MODIFIED a user with ID: ${id}`,
+            message: results.rowCount === 0 ? `unable to modify user with id ${id}` : `MODIFIED a user with ID: ${id}`
          })
          : res.json(error);
       }
@@ -87,8 +107,7 @@ export const deleteUserByID = (req: Request, res: Response) => {
       !error ?
       res.status(200).json({
          status: 'success',
-         message: `DELETED a user with ID: ${id}`,
-         data: results.rows
+         message: results.rowCount === 0 ? `unable to delete user with id: ${id}` : `DELETED a user with ID: ${id}`,
       })
       : res.json(error);
   })
